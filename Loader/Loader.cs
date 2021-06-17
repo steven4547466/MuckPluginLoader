@@ -23,12 +23,7 @@ namespace MuckPluginLoader.Loader
 
         public static Config Config { get; } = new Config();
 
-        static Loader()
-		{
-
-		}
-
-        public static void Run(Assembly[] dependencies = null)
+        public static List<IPlugin<IConfig>> Run(Assembly[] dependencies = null)
         {
             if (dependencies?.Length > 0)
                 Dependencies.AddRange(dependencies);
@@ -39,6 +34,8 @@ namespace MuckPluginLoader.Loader
             ConfigManager.Reload();
 
             EnablePlugins();
+
+            return Plugins;
         }
 
         public static Assembly LoadAssembly(string path)
@@ -49,7 +46,7 @@ namespace MuckPluginLoader.Loader
             }
             catch (Exception exception)
             {
-                Log.Error($"Error while loading an assembly at {path}! {exception}");
+                Log.Error($"[MPL] Error while loading an assembly at {path}! {exception}");
             }
 
             return null;
@@ -63,6 +60,8 @@ namespace MuckPluginLoader.Loader
 
                 if (assembly == null)
                     continue;
+
+                Assemblies[assembly] = assemblyPath;
             }
 
             foreach (Assembly assembly in Assemblies.Keys)
@@ -74,6 +73,8 @@ namespace MuckPluginLoader.Loader
 
                 if (plugin == null)
                     continue;
+
+                Log.Debug($"[MPL] Loading {plugin.Name}");
 
                 Plugins.Add(plugin);
             }
@@ -107,7 +108,7 @@ namespace MuckPluginLoader.Loader
 
                     if (plugin == null)
                     {
-                        Log.Error($"Couldn't find a default constructor for {type.FullName}!");
+                        Log.Error($"[MPL] Couldn't find a default constructor for {type.FullName}!");
 
                         continue;
                     }
@@ -117,7 +118,7 @@ namespace MuckPluginLoader.Loader
             }
             catch (Exception exception)
             {
-                Log.Error($"Error while initializing plugin {assembly.GetName().Name} (at {assembly.Location})! {exception}");
+                Log.Error($"[MPL] Error while initializing plugin {assembly.GetName().Name} (at {assembly.Location})! {exception}");
             }
 
             return null;
@@ -137,7 +138,7 @@ namespace MuckPluginLoader.Loader
                 }
                 catch (Exception exception)
                 {
-                    Log.Error($"Plugin \"{plugin.Name}\" threw an exception while enabling: {exception}");
+                    Log.Error($"[MPL] Plugin \"{plugin.Name}\" threw an exception while enabling: {exception}");
                 }
             }
         }
@@ -152,7 +153,7 @@ namespace MuckPluginLoader.Loader
                 }
                 catch (Exception exception)
                 {
-                    Log.Error($"Plugin \"{plugin.Name}\" threw an exception while disabling: {exception}");
+                    Log.Error($"[MPL] Plugin \"{plugin.Name}\" threw an exception while disabling: {exception}");
                 }
             }
         }
@@ -161,7 +162,7 @@ namespace MuckPluginLoader.Loader
         {
             try
             {
-                Log.Debug($"Loading dependencies at {Paths.Dependencies}");
+                Log.Debug($"[MPL] Loading dependencies at {Paths.Dependencies}");
 
                 foreach (string dependency in Directory.GetFiles(Paths.Dependencies, "*.dll"))
                 {
@@ -172,14 +173,14 @@ namespace MuckPluginLoader.Loader
 
                     Dependencies.Add(assembly);
 
-                    Log.Debug($"Loaded dependency {assembly.FullName}");
+                    Log.Debug($"[MPL] Loaded dependency {assembly.FullName}");
                 }
 
-                Log.Debug("Dependencies loaded successfully!");
+                Log.Debug("[MPL] Dependencies loaded successfully!");
             }
             catch (Exception exception)
             {
-                Log.Error($"An error has occurred while loading dependencies! {exception}");
+                Log.Error($"[MPL] An error has occurred while loading dependencies! {exception}");
             }
         }
 

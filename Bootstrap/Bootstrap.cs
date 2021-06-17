@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -8,12 +9,16 @@ namespace MuckPluginLoader.Bootstrap
 	{
 		public static bool IsLoaded { get; set; }
 
-		public static Version Load() 
+		public static object Plugins { get; set; } 
+
+		public static Version Version { get; set; }
+
+		public static void Load() 
 		{ 
 			if (IsLoaded)
 			{
 				UnityEngine.Debug.LogWarning("[MPL] MuckPluginLoader is already loaded!");
-				return new Version(0, 0, 0, 0);
+				return;
 			}
 			try
 			{
@@ -37,7 +42,7 @@ namespace MuckPluginLoader.Bootstrap
 							MethodInfo method = assembly.GetType("MuckPluginLoader.Loader.Loader").GetMethod("Run");
 							if (method != null)
 							{
-								method.Invoke(null, new object[]
+								var plugins = method.Invoke(null, new object[]
 								{
 									new Assembly[]
 									{
@@ -45,9 +50,11 @@ namespace MuckPluginLoader.Bootstrap
 										Assembly.Load(File.ReadAllBytes(Path.Combine(depsPath, "YamlDotNet.dll")))
 									}
 								});
+								Plugins = plugins;
 							}
 							IsLoaded = true;
-							return assembly.GetName().Version;
+							Version = assembly.GetName().Version;
+							return;
 						}
 						else
 						{
@@ -68,8 +75,6 @@ namespace MuckPluginLoader.Bootstrap
 			{
 				UnityEngine.Debug.LogError(e);
 			}
-
-			return new Version(0, 0, 0, 0);
 		}
 	}
 }

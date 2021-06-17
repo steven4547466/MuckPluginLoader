@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MuckPluginLoader.API.Features;
+using System;
 
 namespace MuckPluginLoader.API.Extensions
 {

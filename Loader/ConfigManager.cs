@@ -42,21 +42,24 @@ namespace MuckPluginLoader
             }
             catch (YamlException yamlException)
             {
-                Log.Error($"An error has occurred while serializing configs: {yamlException}");
+                Log.Error($"[MPL] An error has occurred while serializing configs: {yamlException}");
 
                 return false;
             }
         }
 
-        public static IConfig LoadConfig(string raw)
+        public static IConfig LoadConfig(string raw, IPlugin<IConfig> plugin, bool isLoader = false)
 		{
             try
             {
-                return Deserializer.Deserialize<Config>(raw);
+                if (!isLoader)
+                    return (IConfig)Deserializer.Deserialize(raw, plugin.Config.GetType());
+                else
+                    return Deserializer.Deserialize<Config>(raw);
             } 
             catch (Exception exception)
 			{
-                Log.Error($"An error has occurred deserializing configs: {exception}.");
+                Log.Error($"[MPL] An error has occurred deserializing configs: {exception}.");
                 return null;
             }
         }
@@ -72,7 +75,7 @@ namespace MuckPluginLoader
             }
             catch (Exception exception)
             {
-                Log.Error($"An error has occurred while reading configs from {path}: {exception}");
+                Log.Error($"[MPL] An error has occurred while reading configs from {path}: {exception}");
             }
 
             return string.Empty;
@@ -85,13 +88,13 @@ namespace MuckPluginLoader
                 string loaderPath = Path.Combine(Paths.Configs, "MuckPluginLoader.Loader.yml");
                 if (!File.Exists(loaderPath))
                 {
-                    Log.Warn("MuckPluginLoader.Loader does not have default configs, generating");
+                    Log.Warn("[MPL] MuckPluginLoader.Loader does not have default configs, generating");
 
                     Save(loaderPath, Loader.Loader.Config);
 				}
                 else
 				{
-                    var config = LoadConfig(Read(loaderPath));
+                    var config = LoadConfig(Read(loaderPath), null, true);
 
                     Loader.Loader.Config.CopyProperties(config);
 
@@ -105,13 +108,13 @@ namespace MuckPluginLoader
                     {
                         if (!File.Exists(path))
                         {
-                            Log.Warn($"{plugin.Name} does not have default configs, generating");
+                            Log.Warn($"[MPL] {plugin.Name} does not have default configs, generating");
 
                             Save(path, plugin.Config);
                         }
                         else
                         {
-                            var config = LoadConfig(Read(path));
+                            var config = LoadConfig(Read(path), plugin);
 
                             plugin.Config.CopyProperties(config);
 
@@ -120,7 +123,7 @@ namespace MuckPluginLoader
                     }
                     catch (Exception exception)
 					{
-                        Log.Error($"{plugin.Name} configs could not be loaded. Default configs will be used instead. {exception}");
+                        Log.Error($"[MPL] {plugin.Name} configs could not be loaded. Default configs will be used instead. {exception}");
                         
                         Save(path, plugin.Config);
                     }
@@ -128,7 +131,7 @@ namespace MuckPluginLoader
 			}
             catch(Exception exception)
 			{
-                Log.Error($"An error has occurred while reloading configs: {exception}");
+                Log.Error($"[MPL] An error has occurred while reloading configs: {exception}");
             }
 		}
     }

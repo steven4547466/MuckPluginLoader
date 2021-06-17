@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{54877FB4-49A7-42A8-A544-B05BB061FC49}</ProjectGuid>
+    <ProjectGuid>{DE95B773-C692-43C2-9538-241C5B2AC42A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MuckPluginLoader.API</RootNamespace>
-    <AssemblyName>MuckPluginLoader.API</AssemblyName>
+    <RootNamespace>MuckPluginLoader.Events</RootNamespace>
+    <AssemblyName>0MuckPluginLoader.Events</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,8 +32,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="0Harmony">
+      <HintPath>C:\Users\Steven\AppData\Roaming\MuckPluginLoader\Plugins\dependencies\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-Publicized">
       <HintPath>..\..\..\Steam Again\steamapps\common\Muck\Muck_Data\Managed\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks.Win64, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -55,15 +57,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\InventoryUI.cs" />
-    <Compile Include="Extensions\Reflection.cs" />
-    <Compile Include="Features\Log.cs" />
-    <Compile Include="Features\Paths.cs" />
-    <Compile Include="Features\MuckPlayer.cs" />
-    <Compile Include="Features\Plugin.cs" />
-    <Compile Include="Interfaces\IConfig.cs" />
-    <Compile Include="Interfaces\IPlugin.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="EventArgs\InteractedChestEventArgs.cs" />
+    <Compile Include="EventArgs\InteractingChestEventArgs.cs" />
+    <Compile Include="EventExtensions.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Handlers\Player.cs" />
+    <Compile Include="Patches\Events\Player\InteractingChest.cs" />
+    <Compile Include="Patches\General\AddingPlayers.cs" />
+    <Compile Include="Patches\General\ChatMessageOnStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\API\API.csproj">
+      <Project>{54877fb4-49a7-42a8-a544-b05bb061fc49}</Project>
+      <Name>API</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="steam_api64.dll" />

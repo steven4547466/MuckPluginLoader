@@ -24,7 +24,7 @@ namespace MuckPluginLoader.API.Features
 
         public virtual Version Version { get; }
 
-        public virtual TConfig Config { get; }
+        public TConfig Config { get; } = new TConfig();
 
         public Plugin()
         {
@@ -38,8 +38,8 @@ namespace MuckPluginLoader.API.Features
         public virtual void OnEnable()
         {
             var attribute = Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            Log.Debug($"{Name} v{(attribute == null ? $"{Version.Major}.{Version.Minor}.{Version.Build}" : attribute.InformationalVersion)} by {Author} has been enabled!");
+            Log.Debug($"[MPL] {Name} v{(attribute == null ? $"{Version.Major}.{Version.Minor}.{Version.Build}" : attribute.InformationalVersion)} by {Author} has been enabled!");
         }
-        public virtual void OnDisable() => Log.Debug($"{Name} has been disabled!");
+        public virtual void OnDisable() => Log.Debug($"[MPL] {Name} has been disabled!");
     }
 }
