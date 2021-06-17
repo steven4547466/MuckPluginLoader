@@ -13,15 +13,13 @@ namespace MuckPluginLoader.API.Features
 	{
 		public static List<MuckPlayer> List { get; } = new List<MuckPlayer>();
 
-		public string Username => Player.username;
+		public string Username => PlayerManager.username;
 		
-		public int Id => Player.id;
-
-		public SteamId SteamId => Player.steamId;
+		public int Id => PlayerManager.id;
 
 		public GameObject GameObject => PlayerManager.gameObject;
 
-		public PlayerManager PlayerManager => GameManager.players[Id];
+		public PlayerManager PlayerManager { get; private set; }
 
 
 		private ClientSend clientSend;
@@ -100,11 +98,9 @@ namespace MuckPluginLoader.API.Features
 
 		public ChatBox ChatBox => ChatBox.Instance;
 
-		private Player Player { get; set; }
-
-		public MuckPlayer(Player player)
+		public MuckPlayer(PlayerManager player)
 		{
-			Player = player;
+			PlayerManager = player;
 			List.Add(this);
 		}
 

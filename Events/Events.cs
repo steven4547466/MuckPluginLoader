@@ -12,6 +12,8 @@ namespace MuckPluginLoader.Events
     {
 		public override string Author { get; } = "MPL Team";
 
+		public override string ShortName { get; } = "MuckPluginLoader.Events";
+
 		public static Events Instance { get; set; }
 
 		public Harmony Harmony { get; private set; }
@@ -32,7 +34,7 @@ namespace MuckPluginLoader.Events
 				Harmony.DEBUG = true;
 				Harmony = new Harmony($"MPL-Events-{++harmonyPatches}");
 				Harmony.PatchAll();
-				Log.Debug("[MPL] Events patched successfully");
+				Log.Debug("[MPL] Events patched successfully", Config.EnableDebug);
 			} 
 			catch(Exception exception)
 			{
@@ -44,7 +46,7 @@ namespace MuckPluginLoader.Events
 		{
 			base.OnDisable();
 			Harmony.UnpatchAll();
-			Log.Debug("[MPL] Events unpatched");
+			Log.Debug("[MPL] Events unpatched", Config.EnableDebug);
 		}
 	}
 }

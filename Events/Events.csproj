@@ -58,12 +58,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="EventArgs\AttemptingReviveEventArgs.cs" />
     <Compile Include="EventArgs\InteractedChestEventArgs.cs" />
     <Compile Include="EventArgs\InteractingChestEventArgs.cs" />
+    <Compile Include="EventArgs\SendingCommandEventArgs.cs" />
+    <Compile Include="EventArgs\SendingMessageEventArgs.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Handlers\Player.cs" />
+    <Compile Include="Patches\Events\Player\AttemptingRevive.cs" />
     <Compile Include="Patches\Events\Player\InteractingChest.cs" />
+    <Compile Include="Patches\Events\Player\SendingCommand.cs" />
+    <Compile Include="Patches\Events\Player\SendingMessage.cs" />
     <Compile Include="Patches\General\AddingPlayers.cs" />
     <Compile Include="Patches\General\ChatMessageOnStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

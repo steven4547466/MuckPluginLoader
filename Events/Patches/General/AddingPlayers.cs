@@ -4,26 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
+using MuckPluginLoader.API.Features;
 using Steamworks;
 using UnityEngine;
 
 namespace MuckPluginLoader.Events.Patches.General
 {
-	[HarmonyPatch(typeof(Player), MethodType.Constructor, new[] { typeof(int), typeof(string), typeof(Color), typeof(SteamId) })]
-	internal static class PlayerConstructorPatch
+	[HarmonyPatch(typeof(PlayerManager), nameof(PlayerManager.Awake))]
+	internal static class PlayerManagerPatch
 	{
-		static void Postfix(Player __instance)
+		static void Postfix(PlayerManager __instance)
 		{
-			new API.Features.MuckPlayer(__instance);
-		}
-	}
-
-	[HarmonyPatch(typeof(Player), MethodType.Constructor, new[] { typeof(int), typeof(string), typeof(Color) })]
-	internal static class PlayerConstructorPatch2
-	{
-		static void Postfix(Player __instance)
-		{
-			new API.Features.MuckPlayer(__instance);
+			Log.Debug("Players");
+			new MuckPlayer(__instance);
 		}
 	}
 
