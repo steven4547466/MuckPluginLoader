@@ -64,6 +64,7 @@ namespace MuckPluginLoader.Events.Patches.Events.Player
 				new CodeInstruction(OpCodes.Newobj, GetDeclaredConstructors(typeof(InteractedChestEventArgs))[0]),
 				new CodeInstruction(OpCodes.Dup),
 				new CodeInstruction(OpCodes.Call, Method(typeof(Handlers.Player), nameof(Handlers.Player.OnInteractedChest))),
+				new CodeInstruction(OpCodes.Pop)
 			});
 
 
