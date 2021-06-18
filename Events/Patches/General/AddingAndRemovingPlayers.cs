@@ -15,8 +15,24 @@ namespace MuckPluginLoader.Events.Patches.General
 	{
 		static void Postfix(PlayerManager __instance)
 		{
-			Log.Debug("Players");
+			Log.Debug("Add player");
 			new MuckPlayer(__instance);
+		}
+	}
+
+	[HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new[] { typeof(UnityEngine.Object) })]
+	internal static class PlayerManagerDestroyPatch
+	{
+		static void Prefix(UnityEngine.Object obj)
+		{
+			if (obj is GameObject go)
+			{
+				var playerManager = go.GetComponent<PlayerManager>();
+				if (playerManager != null)
+				{
+					MuckPlayer.List.Remove(MuckPlayer.Get(playerManager.id));
+				}
+			}
 		}
 	}
 

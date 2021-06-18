@@ -96,7 +96,14 @@ namespace MuckPluginLoader.API.Features
 
 		public bool IsLocalPlayer => LocalClient.instance.myId == Id;
 
-		public ChatBox ChatBox => ChatBox.Instance;
+		public ChatBox ChatBox
+		{
+			get
+			{
+				if (!IsLocalPlayer) return null;
+				return ChatBox.Instance;
+			}
+		}
 
 		public MuckPlayer(PlayerManager player)
 		{

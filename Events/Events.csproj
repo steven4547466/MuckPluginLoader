@@ -70,7 +70,7 @@
     <Compile Include="Patches\Events\Player\InteractingChest.cs" />
     <Compile Include="Patches\Events\Player\SendingCommand.cs" />
     <Compile Include="Patches\Events\Player\SendingMessage.cs" />
-    <Compile Include="Patches\General\AddingPlayers.cs" />
+    <Compile Include="Patches\General\AddingAndRemovingPlayers.cs" />
     <Compile Include="Patches\General\ChatMessageOnStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
